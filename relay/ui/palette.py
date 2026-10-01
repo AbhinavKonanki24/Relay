@@ -32,14 +32,14 @@ log = get_logger("ui.palette")
 
 # state -> (light colour, default line)
 STATES = {
-    "ready": ("#2ea043", "Listening — say “Relay” or press Ctrl+Alt+Space"),
-    "listening": ("#3fb950", "Listening… speak now"),
+    "ready": ("#2ea043", "Listening — press Alt+Space"),
+    "listening": ("#3fb950", "Listening…"),
     "hearing": ("#d29922", "Got it…"),
-    "working": ("#d29922", "Working on it…"),
+    "working": ("#d29922", "Working…"),
     "thinking": ("#d29922", "Thinking…"),
-    "speaking": ("#388bfd", "Speaking"),
-    "off": ("#6e7681", "Off — not listening. Click On, or press Ctrl+Alt+Space to talk"),
-    "stopped": ("#f85149", "Relay has stopped"),
+    "speaking": ("#388bfd", "Speaking…"),
+    "off": ("#6e7681", "Off — press Alt+Space to talk"),
+    "stopped": ("#f85149", "Stopped"),
 }
 _BG, _FG, _DIM = "#161b22", "#f0f6fc", "#9da7b3"
 

@@ -695,6 +695,7 @@ class Session:
         if p.phrase in low or norm == p.phrase or self._says_phrase(utterance, p.phrase):
             self._pending = None
             self.say("Confirmed.", _CONF)
+            self.executor.grant_next_confirmation()
             return [p.retry()]
         if is_cancel(low):
             self._pending = None

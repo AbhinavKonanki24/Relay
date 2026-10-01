@@ -37,6 +37,10 @@ def routes_from_config(cfg) -> list[Route]:
         or get_secret("GEMINI_API_KEY", "").strip()
         or os.environ.get("FREELLMAPI_KEY", "").strip()
         or get_secret("FREELLMAPI_KEY", "").strip()
+        or os.environ.get("GROK_API_KEY", "").strip()
+        or get_secret("GROK_API_KEY", "").strip()
+        or os.environ.get("SARVAM_API_KEY", "").strip()
+        or get_secret("SARVAM_API_KEY", "").strip()
         or os.environ.get("GROQ_API_KEY", "").strip()
         or get_secret("GROQ_API_KEY", "").strip()
         or os.environ.get("OPENAI_API_KEY", "").strip()
@@ -59,8 +63,12 @@ def routes_from_config(cfg) -> list[Route]:
             url = "https://generativelanguage.googleapis.com/v1beta/openai/"
         elif key.startswith("gsk_"):
             url = "https://api.groq.com/openai/v1"
-        elif key.startswith("sk-"):
+        elif key.startswith("xai-"):
+            url = "https://api.x.ai/v1"
+        elif key.startswith("sk-") and len(key) > 40:
             url = "https://api.openai.com/v1"
+        elif len(key) == 36 and "-" in key: # Sarvam UUID keys
+            url = "https://api.sarvam.ai/v1"
         else:
             url = "http://127.0.0.1:31415/v1"
     if not url or offline_forced():
@@ -72,6 +80,10 @@ def routes_from_config(cfg) -> list[Route]:
             models = ["gemini-2.0-flash", "gemini-1.5-flash"]
         elif "groq.com" in url.lower():
             models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
+        elif "x.ai" in url.lower():
+            models = ["grok-2-latest", "grok-beta"]
+        elif "sarvam.ai" in url.lower():
+            models = ["sarvam-105b-conversations", "sarvam-105b"]
         elif "openai.com" in url.lower():
             models = ["gpt-4o-mini", "gpt-3.5-turbo"]
         else:
@@ -86,6 +98,8 @@ def routes_from_config(cfg) -> list[Route]:
             hints["auto:fast"] = max(hints.values()) + 1.0  # the router's own pick: last
             models = [m for m, _t in fastest] + ["auto:fast"]
     headers = {"X-Relay-Device": _device_id()}
+    if "sarvam.ai" in url.lower():
+        headers["api-subscription-key"] = key
     routes = [
         Route(
             name=f"{m}",

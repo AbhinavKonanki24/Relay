@@ -120,7 +120,7 @@ class Session:
         apps=None,
         on_quit: Callable[[], None] | None = None,
         on_wake_word: Callable[[bool], None] | None = None,
-        talk_key: str = "ctrl+alt+space",
+        talk_key: str = "alt+space",
         assistant=None,
         audio=None,
     ) -> None:
